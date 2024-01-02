@@ -1,3 +1,3 @@
-# THE-END
+# stellar selfbot that failed and i couldnt be asked to finish
 
-## A random selfbot tool im making with swedewtf
+ wont even tell u how to download it cuz i cba
